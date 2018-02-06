@@ -246,6 +246,14 @@ class URLPlaylistEntry(BasePlaylistEntry):
                 # Move the temporary file to it's final location.
                 os.rename(unhashed_fname, self.filename)
 
+        if self.duration == 0:
+            try:
+                import subprocess
+                ffprobe_check = subprocess.run("ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 {}".format(self.filename).split(), stdout=subprocess.PIPE, encoding='utf-8')
+                self.duration = float(ffprobe_check.stdout.strip()) or 0
+            except:
+                pass
+
 
 class StreamPlaylistEntry(BasePlaylistEntry):
     def __init__(self, playlist, url, title, *, destination=None, **meta):
