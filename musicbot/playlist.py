@@ -347,7 +347,7 @@ class Playlist(EventEmitter, Serializable):
         estimated_time = sum(e.duration for e in islice(self.entries, position - 1))
 
         # When the player plays a song, it eats the first playlist item, so we just have to add the time back
-        if not player.is_stopped and player.current_entry:
+        if not player.is_stopped and player.current_entry and player.current_entry.duration > 0:
             estimated_time += player.current_entry.duration - player.progress
 
         return datetime.timedelta(seconds=estimated_time)
