@@ -235,6 +235,13 @@ class URLPlaylistEntry(BasePlaylistEntry):
 
         self.filename = unhashed_fname = self.playlist.downloader.ytdl.prepare_filename(result)
 
+        if not os.path.isfile(self.filename):
+            exts = {
+                'webm': 'ogg',
+                'mp4': 'm4a'
+            }
+            self.filename = unhashed_fname = "{}.{}".format(os.path.splitext(self.filename)[0], exts[result["ext"]])
+
         if hash:
             # insert the 8 last characters of the file hash to the file name to ensure uniqueness
             self.filename = md5sum(unhashed_fname, 8).join('-.').join(unhashed_fname.rsplit('.', 1))
