@@ -219,8 +219,7 @@ class URLPlaylistEntry(BasePlaylistEntry):
     async def _really_download(self, *, hash=False):
         log.info("Download started: {}".format(self.url))
 
-        retry = True
-        while retry:
+        while True:
             try:
                 result = await self.playlist.downloader.extract_info(self.playlist.loop, self.url, download=True)
                 break
